@@ -3,9 +3,8 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-import redis
 
-from project.config import MYSQL_DB_URL
+from CRUD_TEST.project.core.config import MYSQL_DB_URL
 
 @contextmanager
 def session_scope():
@@ -30,5 +29,3 @@ def session_scope():
         session.close()
 
 Base = declarative_base()
-
-Redis = redis.StrictRedis(host='localhost', port=6379, db=0)
