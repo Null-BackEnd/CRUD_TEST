@@ -6,6 +6,7 @@ from CRUD_TEST.project.core.models.user import User
 
 from CRUD_TEST.project.utils.security import get_password_hash, verify_password, create_access_token
 
+
 def create_user(session: Session, account_id: str, password: str):
     session.add(
         User(
@@ -14,6 +15,7 @@ def create_user(session: Session, account_id: str, password: str):
         )
     )
     return HTTPException(status_code=status.HTTP_201_CREATED, detail="success")
+
 
 def login(session: Session, account_id: str, password: str):
     user = session.query(User.id, User.account_id, User.password).filter(User.account_id == account_id)
@@ -26,6 +28,7 @@ def login(session: Session, account_id: str, password: str):
     return {
         "access_token": create_access_token(id=user["id"])
     }
+
 
 def check_id(session: Session, user_id: str):
     user = session.query(User.account_id).filter(User.id == user_id)
