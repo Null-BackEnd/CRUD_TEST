@@ -15,16 +15,20 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 def get_password_hash(password: str):
     return pwd_context.hash(password)
 
+
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
+
 
 def create_access_token(id: str):
     exp = datetime.utcnow() + timedelta(minutes=ACCESS_TIMEOUT)
     encoded_jwt = jwt.encode({"exp": exp, "sub": id}, SECRET, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     with session_scope() as session:
