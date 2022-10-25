@@ -15,20 +15,16 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
 def get_password_hash(password: str):
     return pwd_context.hash(password)
 
-
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
-
 
 def create_access_token(id: str):
     exp = datetime.utcnow() + timedelta(minutes=ACCESS_TIMEOUT)
     encoded_jwt = jwt.encode({"exp": exp, "sub": id}, SECRET, algorithm=ALGORITHM)
     return encoded_jwt
-
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     with session_scope() as session:
@@ -48,3 +44,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if not user.scalar():
             raise credentials_exception
         return user.first()
+
+
+def check_feed(feed_id: int, user_id: int, session: Session):
+    feed = session.query(Feed).filter(Feed.id==feed_id).first()
+
+    if not feed:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="FEED NOT FOUNDED")
+
+    if feed.user_id == user_id:
+        return feed
+
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="THE USER IS NOT VALID")
