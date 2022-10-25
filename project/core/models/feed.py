@@ -7,7 +7,7 @@ class Feed(Base):
 
     id = Column(INT, autoincrement=True, primary_key=True)
     content = Column(String(3000), nullable=False)
-
+    title = Column(String(100), nullable=False)
     user_id = Column(ForeignKey("tbl_user.id"), primary_key=True)
 
     user = relationship("User", backref=backref("writed_feeds"), foreign_keys=user_id)
