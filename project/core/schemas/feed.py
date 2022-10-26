@@ -1,6 +1,6 @@
 from pydantic import BaseModel, constr
 
-class WriteFeed(BaseModel):
+class Feed(BaseModel):
     title: constr(min_length=1, max_length=100)
     content: constr(min_length=1, max_length=3000)
 
