@@ -20,7 +20,7 @@ async def update_feed(feed_id: int, body: Feed, user: User = Depends(get_current
         return req
 
 @app.delete("/{feed_id}")
-async def del_feed(feed_id: int, user: User = Depends(get_current_user)):
+async def remove_feed(feed_id: int, user: User = Depends(get_current_user)):
     with session_scope() as session:
         req = delete_feed(session=session, feed_id=feed_id, user_id=user.id)
         return req
