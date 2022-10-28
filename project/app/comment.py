@@ -1,31 +1,34 @@
-from project.core.models import session_scope
-from project.core.schemas import comment
-from project.utils.comment import make_comment
+from project.core import session_scope
+from project.utils.comment import write_comment
 from project.utils.comment import modify_comment
 from project.utils.comment import delete_comment
+from project.core.schemas.comment import WriteComment
+from project.core.schemas.comment import ModifyComment, DeleteComment
+from project.core.models.user import User
+from fastapi import APIRouter, status, Depends
+from project.utils.security import get_current_user
 
-from fastapi import APIRouter
-
-router = APIRouter()
 
 
-@router.post("")
-async def make_comment(body: comment.WriteComment):
+app = APIRouter()
+
+
+@app.post("")
+async def writing_comment(body: WriteComment, user: User = Depends(get_current_user)):
     with session_scope() as session:
-        request = make_comment(comment=body.comment_id,content=body.content ,post_id=body.feed_id, user_id=body.user_id, session=session)
+        request =  write_comment(content=body.content ,feed_id=body.feed_id, user_id=user.id, session=session)
+
+        return request
+@app.put("")
+async def modifying_comment(body: ModifyComment, user: User = Depends(get_current_user)):
+    with session_scope() as session:
+        request = modify_comment(comment_id=body.comment_id, content=body.content, user_id=user.id, session=session)
 
         return request
 
-@router.put("")
-async def modify_comment(body: comment.ModifyComment):
+@app.delete("")
+async def deleting_comment(body: DeleteComment, user: User = Depends(get_current_user)):
     with session_scope() as session:
-        request = modify_comment(comment=body.comment, content=body.content, user_id=body.user_id, session=session)
-
-        return request
-
-@router.delete("")
-async def delete_comment(body: comment.WriteComment):
-    with session_scope() as session:
-        requests = delete_comment(comment_id=body.comment_id, user_id=body.user_id, session=session)
+        requests = delete_comment(comment_id=body.comment_id, user_id=user.id, session=session)
 
         return requests
