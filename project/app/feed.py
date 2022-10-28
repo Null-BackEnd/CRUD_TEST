@@ -1,9 +1,9 @@
-from CRUD_TEST.project.core import session_scope
-from CRUD_TEST.project.core.models.user import User
-from CRUD_TEST.project.core.schemas.feed import Feed
-from CRUD_TEST.project.utils.feed import create_feed, edit_feed, delete_feed, see_feed
+from project.core import session_scope
+from project.core.models.user import User
+from project.core.schemas.feed import Feed
+from project.utils.feed import create_feed, edit_feed, delete_feed, see_feed
 from fastapi import APIRouter, status, Depends
-from CRUD_TEST.project.utils.security import get_current_user
+from project.utils.security import get_current_user
 
 app = APIRouter()
 

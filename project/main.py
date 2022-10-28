@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import uvicorn
 
-from CRUD_TEST.project.app import api_router
+from project.app import api_router
 
 
 app = FastAPI()
