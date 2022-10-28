@@ -59,12 +59,11 @@ def check_feed(feed_id: int, user_id: int, session: Session):
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="THE USER IS NOT VALID")
 
 def check_comment(user_id: int, comment_id: int, session: Session):
-    comment = session.query(Comment).filter(Comment.id == comment_id).scalar()
-
+    comment = session.query(Comment).filter(Comment.id == comment_id).first()
     if not comment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="COMMNET NOT FOUND")
 
-    if Comment.user_id == user_id:
+    if comment.user_id == user_id:
         return comment
 
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="THE USER IS NOT VALID")
