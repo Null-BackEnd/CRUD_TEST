@@ -2,9 +2,9 @@ from fastapi import HTTPException, status
 
 from sqlalchemy.orm import Session
 
-from CRUD_TEST.project.core.models.user import User
+from project.core.models.user import User
 
-from CRUD_TEST.project.utils.security import get_password_hash, verify_password, create_access_token
+from project.utils.security import get_password_hash, verify_password, create_access_token
 
 
 def create_user(session: Session, account_id: str, password: str):

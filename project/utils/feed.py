@@ -1,8 +1,8 @@
-from CRUD_TEST.project.core.models.feed import Feed
-from CRUD_TEST.project.core.models.user import User
+from project.core.models.feed import Feed
+from project.core.models.user import User
 
 from sqlalchemy.orm import Session
-from CRUD_TEST.project.utils.security import check_feed
+from project.utils.security import check_feed
 
 
 def create_feed(title: str, content: str, user_id: int, session: Session):

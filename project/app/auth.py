@@ -1,6 +1,6 @@
-from CRUD_TEST.project.core.schemas.user import SignUp, Login
-from CRUD_TEST.project.core import session_scope
-from CRUD_TEST.project.utils.auth import create_user, login, check_id
+from project.core.schemas.user import SignUp, Login
+from project.core import session_scope
+from project.utils.auth import create_user, login, check_id
 
 from fastapi import APIRouter, HTTPException, status
 

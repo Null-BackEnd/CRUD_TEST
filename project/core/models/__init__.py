@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from CRUD_TEST.project.core.config import MYSQL_DB_URL
+from project.core.config import MYSQL_DB_URL
 
 @contextmanager
 def session_scope():
