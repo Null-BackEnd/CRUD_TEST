@@ -3,10 +3,11 @@ from fastapi import HTTPException, Depends, status
 
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
-from CRUD_TEST.project.core.config import ACCESS_TIMEOUT, SECRET, ALGORITHM
-from CRUD_TEST.project.core import session_scope
-from CRUD_TEST.project.core.models.user import User
-from CRUD_TEST.project.core.models.feed import Feed
+from project.core.config import ACCESS_TIMEOUT, SECRET, ALGORITHM
+from project.core import session_scope
+from project.core.models.user import User
+from project.core.models.feed import Feed
+from project.core.models.comment import Comment
 
 from sqlalchemy.orm import Session
 import jwt
@@ -56,3 +57,14 @@ def check_feed(feed_id: int, user_id: int, session: Session):
         return feed
 
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="THE USER IS NOT VALID")
+
+def check_comment(user_id: int, comment_id: int, session: Session):
+    comment = session.query(Comment).filter(Comment.id == comment_id).scalar()
+
+    if not comment:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="COMMNET NOT FOUND")
+
+    if Comment.user_id == user_id:
+        return comment
+
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="THE USER IS NOT VALID")
