@@ -1,10 +1,7 @@
 from project.core.models.comment import Comment
-from project.core.models.user import User
 from sqlalchemy.orm import Session
+from project.utils.security import check_comment
 
-
-def is_my_comment(user_id=int, user=User):
-    return True if user_id == user.id else False
 
 def make_comment(user_id: int, content: str, session: Session):
     new_comment = Comment(
@@ -19,13 +16,20 @@ def make_comment(user_id: int, content: str, session: Session):
         "message": "success"
     }
 
-def delete_comment(user_id: int, content: str, session: Session):
-    is_my_comment(user_id)
-    delete_comment = session.query(content)
-    session.delete(delete_comment)
-    session.commit()
+def delete_comment(user_id: int, comment_id: int, session: Session):
+    comment = check_comment(comment_id=comment_id, user_id=user_id, session=session)
+    session.delete(comment)
 
-def modify_comment(user_id: int, content: str, session: Session):
-    is_my_comment(user_id)
-    modify_comment = session.query(content).filter()
-    modify_comment.update_one({content: content})
+    return {
+        "message": "success"
+    }
+
+def modify_comment(user_id: int, content: str, comment_id: int , session: Session):
+    comment = check_comment(comment_id=comment_id, user_id=user_id, session=session)
+    if comment == True:
+        modify_comment = session.query(content).filter()
+        modify_comment.update_one({content: content})
+
+        return {
+            "message": "success"
+        }
