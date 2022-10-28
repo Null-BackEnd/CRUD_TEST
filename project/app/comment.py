@@ -1,7 +1,5 @@
 from project.core.models import session_scope
 from project.core.schemas import comment
-from project.core.models.user import User
-from project.core.models.feed import Feed
 from project.utils.comment import make_comment
 from project.utils.comment import modify_comment
 from project.utils.comment import delete_comment
@@ -12,22 +10,22 @@ router = APIRouter()
 
 
 @router.post("")
-async def make_comment(body: comment, user=User, feed=Feed):
+async def make_comment(body: comment.WriteComment):
     with session_scope() as session:
-        request = make_comment(comment=body.comment, post_id=feed.id, user_id=user.id, session=session)
+        request = make_comment(comment=body.comment_id,content=body.content ,post_id=body.feed_id, user_id=body.user_id, session=session)
 
         return request
 
 @router.put("")
-async def modify_comment(body: comment, user=User, feed=Feed):
+async def modify_comment(body: comment.ModifyComment):
     with session_scope() as session:
-        request = modify_comment(comment=body.comment, post_id=feed.id, user_id=user.id, session=session)
+        request = modify_comment(comment=body.comment, content=body.content, user_id=body.user_id, session=session)
 
         return request
 
 @router.delete("")
-async def delete_comment(body: comment, feed=Feed, user=User):
+async def delete_comment(body: comment.WriteComment):
     with session_scope() as session:
-        requests = delete_comment(comment=body.comment, feed=feed.id, user_id=user.id, session=session)
+        requests = delete_comment(comment_id=body.comment_id, user_id=body.user_id, session=session)
 
         return requests
